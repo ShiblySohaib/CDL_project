@@ -31,9 +31,6 @@ string color(string s, string color){
 
 
 
-
-
-
 //take input------------------------------------------------------------------------------------------------------------------------------------
 string input(){
     string content;
@@ -111,42 +108,6 @@ string input(){
 }
 
 
-
-
-
-
-//remove comments------------------------------------------------------------------------------------------------------------------------------------
-// string remove_comments(string str1) {
-//     string str2 = "";
-//     bool single = false;
-//     bool multi = false;
-
-//     for (int i = 0; i < str1.length(); i++) {
-//         if (multi) {
-//             if (str1[i] == '*' && str1[i + 1] == '/') {
-//                 multi = false;
-//                 i++;
-//                 if(str1[i] == '\n') i++;
-//             }
-//         } else if (single) {
-//             if (str1[i] == '\n') {
-//                 single = false;
-//                 i++;
-//             }
-//         } else {
-//             if (str1[i] == '/' && str1[i + 1] == '*') {
-//                 multi = true;
-//                 i++;
-//             } else if (str1[i] == '/' && str1[i + 1] == '/') {
-//                 single = true;
-//                 i++;
-//             } else {
-//                 str2 = str2 + str1[i];
-//             }
-//         }
-//     }
-//     return str2;
-// }
 
 string remove_comments(string str1) {
     string str2 = "";
@@ -393,7 +354,6 @@ string syntax_highlighter(string a){
             result+=a[i];
             lexeme = "";
         }
-        //test start
         else if(a[i] == '/' && a[i+1] == '/'){
           if(!lexeme.empty()){
               category = classify_lexeme(lexeme);
@@ -421,7 +381,6 @@ string syntax_highlighter(string a){
           i++;
           lexeme = "";
         }
-        //test end
         else if(a[i] == '\"'){
             lexeme += a[i];
             i++;
