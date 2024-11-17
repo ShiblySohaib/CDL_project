@@ -62,7 +62,6 @@ string input(){
         cout<<"Enter input: ";
         while(1)
         {
-            cin.ignore();
             getline(cin, line);
             if (line=="end"){
                 break;
@@ -117,6 +116,38 @@ string input(){
 
 
 //remove comments------------------------------------------------------------------------------------------------------------------------------------
+// string remove_comments(string str1) {
+//     string str2 = "";
+//     bool single = false;
+//     bool multi = false;
+
+//     for (int i = 0; i < str1.length(); i++) {
+//         if (multi) {
+//             if (str1[i] == '*' && str1[i + 1] == '/') {
+//                 multi = false;
+//                 i++;
+//                 if(str1[i] == '\n') i++;
+//             }
+//         } else if (single) {
+//             if (str1[i] == '\n') {
+//                 single = false;
+//                 i++;
+//             }
+//         } else {
+//             if (str1[i] == '/' && str1[i + 1] == '*') {
+//                 multi = true;
+//                 i++;
+//             } else if (str1[i] == '/' && str1[i + 1] == '/') {
+//                 single = true;
+//                 i++;
+//             } else {
+//                 str2 = str2 + str1[i];
+//             }
+//         }
+//     }
+//     return str2;
+// }
+
 string remove_comments(string str1) {
     string str2 = "";
     bool single = false;
@@ -127,12 +158,11 @@ string remove_comments(string str1) {
             if (str1[i] == '*' && str1[i + 1] == '/') {
                 multi = false;
                 i++;
-                if(str1[i] == '\n') i++;
+                if(str1[i+1]=='\n') i++;
             }
         } else if (single) {
             if (str1[i] == '\n') {
                 single = false;
-                i++;
             }
         } else {
             if (str1[i] == '/' && str1[i + 1] == '*') {
@@ -157,9 +187,9 @@ string remove_comments(string str1) {
 
 
 
-
 //parse lexemes from given code------------------------------------------------------------------------------------------------------------------------------------
 vector<string> get_lexemes(string a){
+    a = remove_comments(a);
     string lexeme = "";
     int n = a.length();
     vector<string>lexemes;
@@ -316,7 +346,8 @@ string classify_lexeme(string s){
 
 
 //classify tokens------------------------------------------------------------------------------------------------------------------------------------
-vector<pair<string, string>> classify_tokens(vector<string>lexemes){
+vector<pair<string, string>> classify_tokens(string s){
+    vector<string>lexemes = get_lexemes(s);
     vector<pair<string, string>>classified_tokens;
     pair<string,string> token;
     for(auto lexeme: lexemes){
@@ -331,13 +362,14 @@ vector<pair<string, string>> classify_tokens(vector<string>lexemes){
 
 //set colors------------------------------------------------------------------------------------------------------------------------------------
 unordered_map<string, string> colors {
-    {"Keyword", BLUE},
-    {"Identifier", RED},
+    {"Keyword", BRIGHT_RED},
+    {"Identifier", CYAN},
     {"String", GREEN},
-    {"Char", CYAN},
-    {"Numeric", BLACK},
+    {"Char", GREEN},
+    {"Numeric", BLUE},
     {"Operator", MAGENTA},
-    {"Punctuation", BRIGHT_YELLOW}
+    {"Punctuation", BRIGHT_YELLOW},
+    {"Comment", BLACK}
 };
 
 
@@ -361,6 +393,35 @@ string syntax_highlighter(string a){
             result+=a[i];
             lexeme = "";
         }
+        //test start
+        else if(a[i] == '/' && a[i+1] == '/'){
+          if(!lexeme.empty()){
+              category = classify_lexeme(lexeme);
+              result+=color(lexeme, colors[category]);
+          }
+          lexeme = "";
+          while(a[i]!='\n'){
+            lexeme+=a[i];
+            i++;
+          }
+          result+=color(lexeme, colors["Comment"])+"\n";
+          lexeme = "";
+        }
+        else if(a[i] == '/' && a[i+1] == '*'){
+          if(!lexeme.empty()){
+              category = classify_lexeme(lexeme);
+              result+=color(lexeme, colors[category]);
+          }
+          lexeme = "";
+          while(!(a[i] == '*' && a[i+1]=='/')){
+            lexeme+=a[i];
+            i++;
+          }
+          result+=color(lexeme+"*/", colors["Comment"]);
+          i++;
+          lexeme = "";
+        }
+        //test end
         else if(a[i] == '\"'){
             lexeme += a[i];
             i++;
@@ -448,8 +509,7 @@ void app() {
         }
         else if(choice == 3) {//classify tokens
             string s = input();
-            vector<string>lexemes = get_lexemes(s);
-            vector<pair<string, string>>tokens = classify_tokens(lexemes);
+            vector<pair<string, string>>tokens = classify_tokens(s);
             cout<<color("\n\nClassified tokens successfully!\n\n\n", GREEN);
             Sleep(1000);
             cout << left <<setw(15)<<"Class"<<" -\t"<<"Token"<< endl;
