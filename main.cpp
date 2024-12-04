@@ -44,7 +44,7 @@ string input(){
         cin >> choice;
 
         if (cin.fail() || choice<1 || choice>2) {
-            throw invalid_argument(color("Invalid input! Please enter a valid option.\n\n", RED));
+            throw invalid_argument(color("Invalid choice!.\n\n", RED));
         }
     }
     catch (const invalid_argument& e) {
@@ -109,6 +109,13 @@ string input(){
 
 
 
+
+
+
+
+
+
+//remove comments
 string remove_comments(string str1) {
     string str2 = "";
     bool single = false;
@@ -425,6 +432,71 @@ string syntax_highlighter(string a){
 
 
 
+//postfix generator
+int prec(char c) {
+    if (c == '^')
+        return 3;
+    else if (c == '/' || c == '*')
+        return 2;
+    else if (c == '+' || c == '-')
+        return 1;
+    else
+        return -1;
+}
+
+string postfix_generator(string s) {
+    stack<char> st;
+    string result;
+
+    for (int i = 0; i < s.length(); i++) {
+        char c = s[i];
+
+        if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'))
+            result += c;
+
+        else if (c == '(')
+            st.push('(');
+
+        else if (c == ')') {
+            while (st.top() != '(') {
+                result += st.top();
+                st.pop();
+            }
+            st.pop(); 
+        }
+
+        else {
+            while (!st.empty() && prec(c) < prec(st.top()) ||
+                   !st.empty() && prec(c) == prec(st.top())) {
+                result += st.top();
+                st.pop();
+            }
+            st.push(c);
+        }
+    }
+
+    while (!st.empty()) {
+        result += st.top();
+        st.pop();
+    }
+
+    return result;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //main app menu------------------------------------------------------------------------------------------------------------------------------------
 void app() {
@@ -436,61 +508,97 @@ void app() {
         cout << "[2] Lexical analyzer\n";
         cout << "[3] Token classifier\n";
         cout << "[4] Syntax highlighter\n";
+        cout << "[5] Postfix generator\n";
         cout << "[0] Exit\n";
         cout << "\nChoose an option: ";
 
         try {
             cin >> choice;
 
-            if (cin.fail() || choice<0 || choice>4) {
-                throw invalid_argument(color("Invalid input! Please enter a valid option.\n\n", RED));
+            if (cin.fail() || choice<0 || choice>5) {
+                throw invalid_argument(color("Invalid choice!\n\n", RED));
             }
         }
         catch (const invalid_argument& e) {
             cout << e.what() << endl;
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            choice = -1;
         }
         if(choice == 1) {//remove comments
             string s = input();
-            cout<<color("\n\nComments removed successfully!\n\n\n", GREEN);
-            Sleep(1000);
-            cout<<remove_comments(s);
+            if(s.empty()){
+                cout<<color("\n\nFailed to take input!\n\n\n", RED);
+            }
+            else{
+                cout<<color("\n\nComments removed successfully!\n\n\n", GREEN);
+                Sleep(500);
+                cout<<remove_comments(s);
+            }
         }
         else if(choice == 2) {//lexical analysis
             string s = input();
-            vector<string>lexemes = get_lexemes(s);
-            cout<<"\n\n"<<lexemes.size()<<color(" Lexemes found!\n\n\n", GREEN);
-            Sleep(1000);
-            cout<<"Lexemes:\n";
-            cout<<"========\n";
-            for(auto i:lexemes) cout<<i<<endl;
+            if(s.empty()){
+                cout<<color("\n\nFailed to take input!\n\n\n", RED);
+            }
+            else{
+                vector<string>lexemes = get_lexemes(s);
+                cout<<"\n\n"<<lexemes.size()<<color("Analysis complete!\n\n\n", GREEN);
+                Sleep(500);
+                cout<<"Lexemes:\n";
+                cout<<"========\n";
+                for(auto i:lexemes) cout<<i<<endl;
+            }
         }
         else if(choice == 3) {//classify tokens
             string s = input();
-            vector<pair<string, string>>tokens = classify_tokens(s);
-            cout<<color("\n\nClassified tokens successfully!\n\n\n", GREEN);
-            Sleep(1000);
-            cout << left <<setw(15)<<"Class"<<" -\t"<<"Token"<< endl;
-            cout <<"=============================="<< endl;
-            for(auto token: tokens){
-                cout << left <<setw(15)<<token.second<<" -\t"<<token.first<< endl;
+            if(s.empty()){
+                cout<<color("\n\nFailed to take input!\n\n\n", RED);
+            }
+            else{
+                vector<pair<string, string>>tokens = classify_tokens(s);
+                cout<<color("\n\nClassified tokens successfully!\n\n\n", GREEN);
+                Sleep(500);
+                cout << left <<setw(15)<<"Class"<<" -\t"<<"Token"<< endl;
+                cout <<"=============================="<< endl;
+                for(auto token: tokens){
+                    cout << left <<setw(15)<<token.second<<" -\t"<<token.first<< endl;
+                }
             }
         }
         else if(choice == 4) {//syntax highlighter
             string s = input();
-            string highlighted = syntax_highlighter(s);
-            cout<<color("\n\nHighlighting code complete!\n\n\n", GREEN);
-            Sleep(1000);
-            cout<<highlighted<<endl;
+            if(s.empty()){
+                cout<<color("\n\nFailed to take input!\n\n\n", RED);
+            }
+            else{
+                string highlighted = syntax_highlighter(s);
+                cout<<color("\n\nHighlighting complete!\n\n\n", GREEN);
+                Sleep(500);
+                cout<<highlighted<<endl;
+            }
         }
-        else{
+        else if(choice == 5){
+            string s;
+            cout<<"\nEnter expression to convert to postfix: ";
+            cin>>s;
+            if(s.empty()){
+                cout<<color("\n\nFailed to take input!\n\n\n", RED);
+            }
+            else{
+                string result = postfix_generator(s);
+                cout<<color("\n\nPostfix generation complete!\n\n\n", GREEN);
+                Sleep(500);
+                cout<<"Postfix expresssion: "<<result<<endl;
+            }
+        }
+        else if(choice == 0){
             cout<<color("\n\nThank you for using the app. Exiting...", GREEN);
-            Sleep(1000);
+            Sleep(500);
             cout<<"\n\n";
             return;
         }
-        std::cout << "\n\nPress any key to continue...";
+        cout << "\n\nPress any key to continue...";
     
         while (!_kbhit()) {
         }
