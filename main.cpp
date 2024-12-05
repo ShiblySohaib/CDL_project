@@ -487,6 +487,35 @@ string postfix_generator(string s) {
 
 
 
+//intermediate code generator
+vector<string> intermediate_code(string s){
+    stack<string>stk;
+    vector<string>var;
+    int x = 1;
+
+    for (int i=0;i<s.length();i++){
+        if (s[i]=='+' || s[i]=='-' || s[i]=='*' || s[i]=='/'){
+            string temp2= stk.top();
+            stk.pop();
+            string temp1= stk.top();
+            stk.pop();
+            string str = "t"+to_string(x)+" = "+temp1+ string(1,s[i])+temp2;
+            string str2 = "t"+to_string(x);
+            stk.push(str2);
+            x++;
+            var.push_back(str);
+
+        }
+        else {
+            stk.push(string(1,s[i]));
+        }
+    }
+    return var;
+}
+
+
+
+
 
 
 
@@ -509,13 +538,14 @@ void app() {
         cout << "[3] Token classifier\n";
         cout << "[4] Syntax highlighter\n";
         cout << "[5] Postfix generator\n";
+        cout << "[6] Intermediate code generator\n";
         cout << "[0] Exit\n";
         cout << "\nChoose an option: ";
 
         try {
             cin >> choice;
 
-            if (cin.fail() || choice<0 || choice>5) {
+            if (cin.fail() || choice<0 || choice>6) {
                 throw invalid_argument(color("Invalid choice!\n\n", RED));
             }
         }
@@ -590,6 +620,23 @@ void app() {
                 cout<<color("\n\nPostfix generation complete!\n\n\n", GREEN);
                 Sleep(500);
                 cout<<"Postfix expresssion: "<<result<<endl;
+            }
+        }
+        else if(choice == 6){
+            string s;
+            cout<<"\nEnter postfix expression to generate intermediate code: ";
+            cin>>s;
+            if(s.empty()){
+                cout<<color("\n\nFailed to take input!\n\n\n", RED);
+            }
+            else{
+                vector<string>tac = intermediate_code(s);
+                cout<<color("\n\nIntermediate code generation complete!\n\n\n", GREEN);
+                Sleep(500);
+                cout<<"Intermediate code\n";
+                for(string line:tac){
+                    cout<<line<<"\n";
+                }
             }
         }
         else if(choice == 0){
