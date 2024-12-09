@@ -531,8 +531,8 @@ vector<string> intermediate_code(string s){
 void app() {
     for(;;) {
         int choice;
-        cout << "\n\n\t\tProject Zero\n";
-        cout << "\t\t============\n\n";
+        cout << "\n\n\t\tCompiLearn\n";
+        cout << "\t\t==========\n\n";
         cout << "[1] Remove comment\n";
         cout << "[2] Lexical analyzer\n";
         cout << "[3] Token classifier\n";
@@ -640,8 +640,13 @@ void app() {
             }
         }
         else if(choice == 0){
-            cout<<color("\n\nThank you for using the app. Exiting...", GREEN);
-            Sleep(500);
+            cout<<color("\n\nThank you for using the app. Exiting", GREEN);
+            Sleep(300);
+            cout<<color(".", GREEN);
+            Sleep(300);
+            cout<<color(".", GREEN);
+            Sleep(300);
+            cout<<color(".", GREEN);
             cout<<"\n\n";
             return;
         }
