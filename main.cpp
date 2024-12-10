@@ -488,7 +488,8 @@ string postfix_generator(string s) {
 
 
 //intermediate code generator
-vector<string> intermediate_code(string s){
+vector<string> intermediate_code(string exp){
+    string s = postfix_generator(exp);
     stack<string>stk;
     vector<string>var;
     int x = 1;
@@ -625,7 +626,7 @@ void app() {
         }
         else if(choice == 6){
             string s;
-            cout<<"\nEnter postfix expression to generate intermediate code: ";
+            cout<<"\nEnter expression to generate intermediate code: ";
             cin>>s;
             if(s.empty()){
                 cout<<color("\n\nFailed to take input!\n\n\n", RED);
