@@ -573,7 +573,8 @@ void app() {
             }
             else{
                 vector<string>lexemes = get_lexemes(s);
-                cout<<"\n\n"<<lexemes.size()<<color("Analysis complete!\n\n\n", GREEN);
+                cout<<"\n\n"<<color("Analysis complete!\n\n\n", GREEN);
+                cout<<lexemes.size()<<" lexemes found!\n\n";
                 Sleep(500);
                 cout<<"Lexemes:\n";
                 cout<<"========\n";
