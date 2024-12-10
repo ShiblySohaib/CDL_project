@@ -634,7 +634,7 @@ void app() {
                 vector<string>tac = intermediate_code(s);
                 cout<<color("\n\nIntermediate code generation complete!\n\n\n", GREEN);
                 Sleep(500);
-                cout<<"Intermediate code\n";
+                cout<<"Intermediate code:\n";
                 for(string line:tac){
                     cout<<line<<"\n";
                 }
