@@ -242,11 +242,11 @@ bool is_keyword(string s){
 
 
 bool is_identifier(string s) {
-    if (!std::isalpha(s[0]) && s[0] != '_') {
+    if (!isalpha(s[0]) && s[0] != '_') {
         return false;
     }
     for (size_t i = 1; i < s.size(); ++i) {
-        if (!std::isalnum(s[i]) && s[i] != '_') {
+        if (!isalnum(s[i]) && s[i] != '_') {
             return false;
         }
     }
