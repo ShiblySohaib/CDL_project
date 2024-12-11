@@ -490,6 +490,7 @@ string postfix_generator(string s) {
 //intermediate code generator
 vector<string> intermediate_code(string exp){
     string s = postfix_generator(exp);
+    cout<<"\n\nPostfix expresssion: "<<s<<"\n\n";
     stack<string>stk;
     vector<string>var;
     int x = 1;
